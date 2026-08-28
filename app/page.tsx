@@ -39,11 +39,12 @@ interface StoreSettings {
   countdownEnd: string | null
 }
 
-// The 4 exact leaked colors: Space Black | Sky Blue | Deep Plum | Titanium Gray
+// The 4 exact leaked colors: Space Black | Sky Blue | Henna Crimson | Titanium Gray
 const COLOR_HEX_MAP: Record<string, string> = {
   'Space Black':    '#26272B',
   'Sky Blue':       '#7FAADC',
-  'Deep Plum':      '#622749',
+  'Henna Crimson':  '#7A1D2C',
+  'Deep Plum':      '#7A1D2C',
   'Titanium Gray':  '#B2B7BD',
 }
 

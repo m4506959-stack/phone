@@ -47,7 +47,8 @@ interface ReservationResult {
 const COLOR_HEX_MAP: Record<string, string> = {
   'Space Black':    '#26272B',
   'Sky Blue':       '#7FAADC',
-  'Deep Plum':      '#622749',
+  'Henna Crimson':  '#7A1D2C',
+  'Deep Plum':      '#7A1D2C',
   'Titanium Gray':  '#B2B7BD',
 }
 

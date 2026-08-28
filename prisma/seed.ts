@@ -48,11 +48,11 @@ async function main() {
     },
   })
 
-  // The 4 exact colors from the official leak image:
+  // The 4 exact colors from the official leak image (Space Black, Sky Blue, Henna Crimson, Titanium Gray):
   const leakedColors = [
     { name: 'Space Black', nameAr: 'أسود فضائي', hex: '#26272B' },
     { name: 'Sky Blue', nameAr: 'أزرق سماوي', hex: '#7FAADC' },
-    { name: 'Deep Plum', nameAr: 'بنفسجي بري داكن', hex: '#622749' },
+    { name: 'Henna Crimson', nameAr: 'حنّي عنابي', hex: '#7A1D2C' },
     { name: 'Titanium Gray', nameAr: 'رمادي تيتانيوم', hex: '#B2B7BD' },
   ]
 
