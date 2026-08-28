@@ -1,0 +1,45 @@
+{
+  "name": "reservation-system",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/nodemailer": "^8.0.1",
+    "@types/qrcode": "^1.5.6",
+    "@types/three": "^0.185.4",
+    "bcryptjs": "^3.0.3",
+    "nanoid": "^5.1.0",
+    "next": "^14.2.24",
+    "next-auth": "^5.0.0-beta.25",
+    "nodemailer": "^6.9.16",
+    "prisma": "^6.4.1",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.0",
+    "three": "^0.185.1",
+    "zod": "^3.24.1"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.24",
+    "tsx": "^4.19.0",
+    "typescript": "^5"
+  }
+}

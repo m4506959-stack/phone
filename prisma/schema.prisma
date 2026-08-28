@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("EMPLOYEE") // OWNER | ADMIN | EMPLOYEE
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  auditLogs AuditLog[]
+
+  @@index([email])
+}
+
+model StoreSettings {
+  id               String   @id @default(cuid())
+  storeName        String   @default("iPhone 18 Pre-Order")
+  storeNameAr      String   @default("حجز الطلبيات المسبقة")
+  logo             String?
+  phone            String?
+  whatsapp         String?
+  address          String?
+  addressAr        String?
+  workingHours     String?
+  workingHoursAr   String?
+  reservationsOpen Boolean  @default(true)
+  maxQtyPerCustomer Int     @default(2)
+  reservationExpiry Int     @default(30) // minutes
+  countdownEnabled Boolean  @default(false)
+  countdownEnd     DateTime?
+  primaryColor     String   @default("#0066CC")
+  defaultLanguage  String   @default("ar")
+  smtpHost         String   @default("smtp.gmail.com")
+  smtpPort         Int      @default(587)
+  smtpUser         String   @default("m4506959@gmail.com")
+  smtpPass         String   @default("")
+  smtpFrom         String   @default("m4506959@gmail.com")
+  emailEnabled     Boolean  @default(true)
+  updatedAt        DateTime @updatedAt
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  name        String
+  nameAr      String
+  description String?
+  descriptionAr String?
+  images      String?          // Comma-separated or JSON
+  active      Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  variants    ProductVariant[]
+}
+
+model ProductVariant {
+  id          String   @id @default(cuid())
+  productId   String
+  storage     String
+  color       String
+  colorAr     String
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  inventory   Inventory?
+  reservationItems ReservationItem[]
+
+  @@unique([productId, storage, color])
+  @@index([productId])
+}
+
+model Inventory {
+  id             String   @id @default(cuid())
+  variantId      String   @unique
+  totalStock     Int      @default(0)
+  reservedStock  Int      @default(0)
+  completedStock Int      @default(0)
+  updatedAt      DateTime @updatedAt
+
+  variant        ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  transactions   InventoryTransaction[]
+}
+
+model InventoryTransaction {
+  id          String   @id @default(cuid())
+  inventoryId String
+  type        String   // ADD | REMOVE | ADJUST | RESERVE | RELEASE | COMPLETE
+  quantity    Int
+  note        String?
+  createdAt   DateTime @default(now())
+  createdBy   String?
+
+  inventory   Inventory @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+
+  @@index([inventoryId])
+}
+
+model Customer {
+  id             String   @id @default(cuid())
+  fullName       String
+  phone          String
+  email          String?
+  city           String?
+  area           String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  reservations   Reservation[]
+
+  @@index([phone])
+  @@index([email])
+}
+
+model Reservation {
+  id              String            @id @default(cuid())
+  reservationCode String            @unique
+  token           String            @unique
+  customerId      String
+  status          String            @default("PENDING") // PENDING | CONFIRMED | ARRIVED | READY_FOR_PICKUP | COMPLETED | CANCELLED | EXPIRED
+  deliveryMethod  String            @default("PICKUP") // PICKUP | DELIVERY
+  notes           String?
+  totalAmount     Float             @default(0)
+  expiresAt       DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  customer        Customer          @relation(fields: [customerId], references: [id])
+  items           ReservationItem[]
+  notifications   Notification[]
+
+  @@index([token])
+  @@index([status])
+  @@index([reservationCode])
+  @@index([createdAt])
+}
+
+model ReservationItem {
+  id         String   @id @default(cuid())
+  reservationId String
+  variantId  String
+  quantity   Int
+  unitPrice  Float
+  createdAt  DateTime @default(now())
+
+  reservation Reservation    @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  variant     ProductVariant @relation(fields: [variantId], references: [id])
+
+  @@index([reservationId])
+  @@index([variantId])
+}
+
+model Notification {
+  id            String             @id @default(cuid())
+  reservationId String
+  type          String             // NotificationType
+  status        String             @default("PENDING") // PENDING | SENT | FAILED
+  recipient     String             // email address
+  subject       String
+  body          String
+  error         String?
+  sentAt        DateTime?
+  createdAt     DateTime           @default(now())
+
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+
+  @@index([reservationId])
+  @@index([status])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  action     String
+  entity     String
+  entityId   String
+  prevValue  String?
+  newValue   String?
+  ip         String?
+  createdAt  DateTime @default(now())
+
+  user       User @relation(fields: [userId], references: [id])
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}

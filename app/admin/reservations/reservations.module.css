@@ -1,0 +1,28 @@
+.pageHeader { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.pageTitle { font-size: 24px; font-weight: 800; }
+.totalBadge { background: var(--color-primary-light); color: var(--color-primary); padding: 4px 12px; border-radius: var(--radius-full); font-size: 14px; font-weight: 600; }
+
+.filterCard { padding: 16px; margin-bottom: 0; }
+.filterRow { display: flex; flex-direction: column; gap: 12px; }
+.searchInput { max-width: 400px; }
+.statusTabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.statusTab { padding: 5px 12px; border-radius: var(--radius-full); border: 1.5px solid var(--color-border); background: transparent; color: var(--color-text-secondary); font-size: 12px; font-weight: 600; cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; }
+.statusTab:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.statusTabActive { background: var(--color-primary); border-color: var(--color-primary); color: white; }
+
+/* Mobile cards */
+.mobileCards { display: none; margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.mobileCard { padding: 14px; cursor: pointer; }
+.mobileCardHeader { display: flex; justify-content: space-between; align-items: flex-start; }
+.mobileCardExpanded { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--color-border); }
+
+.pagination { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+
+@media (min-width: 769px) {
+  .mobileCards { display: none !important; }
+}
+
+@media (max-width: 768px) {
+  .mobileCards { display: flex; }
+  .searchInput { max-width: 100%; }
+}

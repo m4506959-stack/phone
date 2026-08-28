@@ -1,0 +1,777 @@
+/* ========================================================================
+   CINEMATIC 3D IPHONE 18 KEYNOTE SHOWCASE
+   Giant Typographic Backdrop • Precision PBR Shading • Studio Atmosphere
+   ======================================================================== */
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #060303;
+  color: #ffffff;
+  position: relative;
+  overflow-x: hidden;
+  font-family: var(--font-arabic);
+}
+
+/* ===== FIXED GLASS NAVIGATION HUD ===== */
+.navBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  padding: 16px 40px;
+  background: rgba(6, 3, 3, 0.7);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.35s ease;
+}
+
+.navBarScrolled {
+  background: rgba(6, 3, 3, 0.95);
+  border-bottom-color: var(--accent-glow, rgba(148, 56, 40, 0.4));
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85);
+}
+
+.navInner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brandGroup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brandBeacon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--theme-color, #943828);
+  box-shadow: 0 0 16px var(--theme-color, #943828), 0 0 32px var(--theme-color, #943828);
+}
+
+.brandTitle {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.brandBadge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 3px 10px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navButtonGhost {
+  padding: 9px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.navButtonGhost:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.navButtonPrimary {
+  padding: 10px 24px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #060303;
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+}
+
+.navButtonPrimary:hover {
+  background: #e2e8f0;
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+/* ===== HERO SECTION WITH GIANT TYPOGRAPHY BACKDROP ===== */
+.heroSection {
+  min-height: 100vh;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 100px 20px 60px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--theme-color, #7a2e22) 55%, transparent) 0%, rgba(10, 5, 5, 0.9) 45%, #050202 100%);
+  transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+/* Giant 3D Typographic Backdrop ("PRO" / "MAX" / "AIR") */
+.giantTypoBackdrop {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(120px, 24vw, 360px);
+  font-weight: 900;
+  font-family: -apple-system, BlinkMacSystemFont, "Cairo", sans-serif;
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.12);
+  line-height: 0.8;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  white-space: nowrap;
+  text-shadow: 0 20px 80px rgba(0, 0, 0, 0.9);
+  transition: all 0.5s ease;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.02) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Top Title Area */
+.heroTopBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 900px;
+  margin: 0 auto 10px;
+  position: relative;
+  z-index: 10;
+}
+
+.keynoteTagRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.eventPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.warrantyPill {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.heroGrandTitle {
+  font-size: clamp(32px, 4.5vw, 54px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.heroTitleShimmer {
+  background: linear-gradient(135deg, #ffffff 20%, #fcd34d 60%, #f87171 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== CENTERED PHONE SHOWCASE ===== */
+.centeredPhoneStage {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto 25px;
+  z-index: 10;
+}
+
+.phoneImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: phoneFloat 4s ease-in-out infinite;
+}
+
+@keyframes phoneFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-16px); }
+}
+
+.phoneProductImage {
+  object-fit: contain;
+  width: auto !important;
+  height: 100% !important;
+  max-width: 100%;
+  animation: phoneFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: filter 0.6s ease, transform 0.3s ease;
+}
+
+@keyframes phoneFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.93) translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ===== CONTROLS PANEL (BELOW PHONE) ===== */
+.controlsPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 15;
+  background: rgba(18, 18, 22, 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  padding: 28px 36px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px color-mix(in srgb, var(--theme-color, #7a2e22) 20%, transparent);
+}
+
+/* Model Selector Pills */
+.modelSelectorPills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.modelPillBtn {
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.modelPillBtn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.modelPillBtnActive {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+}
+
+/* Titanium Color Swatches */
+.swatchSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.swatchHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.swatchLabel {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.swatchName {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.swatchRow {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.swatchCircleBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  padding: 3px;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swatchCircleBtn:hover {
+  transform: scale(1.18);
+}
+
+.swatchCircleBtnActive {
+  border-color: #ffffff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.swatchCore {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Storage Selector */
+.storageSelectionRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.storageCardBtn {
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.storageCardBtn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+}
+
+.storageCardBtnActive {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+}
+
+.storagePriceTag {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+/* Price & Action HUD */
+.actionPriceBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  flex-wrap: wrap;
+  padding-top: 6px;
+  width: 100%;
+}
+
+.priceGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.priceMicroLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.priceGrandNumber {
+  font-size: 38px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.priceCurrencyLabel {
+  font-size: 17px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.85);
+  margin-inline-start: 6px;
+}
+
+.orderNowMainBtn {
+  padding: 16px 42px;
+  border-radius: 9999px;
+  font-size: 16px;
+  font-weight: 900;
+  color: #060303;
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.35);
+}
+
+.orderNowMainBtn:hover {
+  background: #f1f5f9;
+  box-shadow: 0 0 55px rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* ===== APPLE EVENT COUNTDOWN BAR ===== */
+.keynoteCountdownBanner {
+  position: relative;
+  z-index: 20;
+  max-width: 1100px;
+  margin: -20px auto 60px;
+  padding: 0 32px;
+}
+
+.countdownGlassPanel {
+  background: rgba(25, 12, 12, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 24px 36px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.countdownMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.countdownOverline {
+  font-size: 11px;
+  font-weight: 900;
+  color: #fcd34d;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.countdownMainHeading {
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.countdownLocationText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.countdownGrid {
+  display: flex;
+  gap: 14px;
+}
+
+.countdownBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+  padding: 10px 14px;
+  background: rgba(6, 3, 3, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+}
+
+.countdownDigit {
+  font-size: 26px;
+  font-weight: 900;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.countdownUnit {
+  font-size: 10px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* ===== 3D ARCHITECTURAL SPECS BENTO ===== */
+.bentoSpecsContainer {
+  position: relative;
+  z-index: 20;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 40px 120px;
+}
+
+.specsMainHeading {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.specsOverline {
+  font-size: 13px;
+  font-weight: 900;
+  color: #fcd34d;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.specsTitleText {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.specsBentoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.bentoSpecCard {
+  background: rgba(25, 12, 12, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 26px;
+  padding: 38px 32px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bentoSpecCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bentoSpecCard:hover {
+  background: rgba(25, 12, 12, 0.75);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-6px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+}
+
+.bentoSpecCard:hover::before {
+  opacity: 1;
+}
+
+.bentoCardSpanTwo {
+  grid-column: span 2;
+}
+
+.bentoIndex {
+  font-size: 11px;
+  font-weight: 900;
+  color: #fcd34d;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bentoHeading {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.bentoDesc {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.8;
+}
+
+/* ===== FOOTER ===== */
+.footerBar {
+  position: relative;
+  z-index: 20;
+  padding: 45px 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #020101;
+}
+
+.footerInner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .heroMainGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .heroTextColumn {
+    align-items: center;
+  }
+
+  .heroPunchline {
+    margin: 0 auto;
+  }
+
+  .keynoteTagRow,
+  .modelSelectorPills,
+  .swatchRow,
+  .storageSelectionRow,
+  .actionPriceBlock {
+    justify-content: center;
+  }
+
+  .hero3DStageColumn {
+    height: 520px;
+  }
+
+  .giantTypoBackdrop {
+    font-size: 160px;
+  }
+
+  .specsBentoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bentoCardSpanTwo {
+    grid-column: span 1;
+  }
+
+  .countdownGlassPanel {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .navBar {
+    padding: 12px 20px;
+  }
+
+  .heroSection {
+    padding: 100px 20px 50px;
+  }
+
+  .heroGrandTitle {
+    font-size: 34px;
+  }
+
+  .hero3DStageColumn {
+    height: 440px;
+  }
+
+  .priceGrandNumber {
+    font-size: 32px;
+  }
+
+  .orderNowMainBtn {
+    padding: 15px 32px;
+    font-size: 15px;
+  }
+
+  .countdownGrid {
+    gap: 8px;
+  }
+
+  .countdownBox {
+    min-width: 52px;
+    padding: 8px 10px;
+  }
+
+  .countdownDigit {
+    font-size: 20px;
+  }
+
+  .bentoSpecsContainer {
+    padding: 40px 20px 80px;
+  }
+}
