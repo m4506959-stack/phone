@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useI18n } from '@/contexts/i18n-context'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import PhoneBackShowcase from '@/components/iphone-back-showcase'
+import PhoneFrontShowcase from '@/components/iphone-front-showcase'
 import styles from './home.module.css'
 
 const GalaxyBackground = dynamic(() => import('@/components/galaxy-background'), {
@@ -275,9 +275,9 @@ export default function HomePage() {
             </h1>
           </div>
 
-          {/* ===== CENTERED PHONE HERO (100% Transparent Background, iPhone 17 Styling) ===== */}
+          {/* ===== CENTERED PHONE FRONT DISPLAY SHOWCASE ===== */}
           <div className={styles.centeredPhoneStage}>
-            <PhoneBackShowcase
+            <PhoneFrontShowcase
               colorHex={activeColorHex}
               colorName={selectedColor}
               modelId={selectedProductId}
@@ -301,6 +301,35 @@ export default function HomePage() {
                   </button>
                 )
               })}
+            </div>
+
+            {/* 4 Leaked Color Glowing Pills */}
+            <div className={styles.swatchSection}>
+              <div className={styles.swatchRow}>
+                {availableColors.map((color) => {
+                  const active = color.name === selectedColor
+                  return (
+                    <button
+                      key={color.name}
+                      onClick={() => setSelectedColor(color.name)}
+                      className={`${styles.swatchCircleBtn} ${active ? styles.swatchCircleBtnActive : ''}`}
+                      title={lang === 'ar' ? color.nameAr : color.name}
+                      style={{
+                        borderColor: active ? color.hex : 'transparent',
+                        boxShadow: active ? `0 0 24px ${color.hex}` : 'none',
+                      }}
+                    >
+                      <span
+                        className={styles.swatchCore}
+                        style={{
+                          background: color.hex,
+                          boxShadow: `0 0 10px ${color.hex}`,
+                        }}
+                      />
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
             {/* Storage row */}

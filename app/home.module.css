@@ -131,32 +131,31 @@
   justify-content: flex-start;
   padding: 100px 20px 60px;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--theme-color, #7a2e22) 55%, transparent) 0%, rgba(10, 5, 5, 0.9) 45%, #050202 100%);
-  transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--theme-color, #7FAADC) 40%, transparent) 0%, rgba(10, 8, 14, 0.88) 50%, #030306 100%);
+  transition: background 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: center;
 }
 
-/* Giant 3D Typographic Backdrop ("PRO" / "MAX" / "AIR") */
+/* Giant 3D Typographic Backdrop ("PRO" / "MAX" / "AIR") with dynamic lighting */
 .giantTypoBackdrop {
   position: absolute;
-  top: 38%;
+  top: 36%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: clamp(120px, 24vw, 360px);
+  font-size: clamp(140px, 28vw, 420px);
   font-weight: 900;
   font-family: -apple-system, BlinkMacSystemFont, "Cairo", sans-serif;
   letter-spacing: -0.05em;
-  color: rgba(255, 255, 255, 0.12);
   line-height: 0.8;
   pointer-events: none;
   user-select: none;
   z-index: 0;
   white-space: nowrap;
-  text-shadow: 0 20px 80px rgba(0, 0, 0, 0.9);
-  transition: all 0.5s ease;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.02) 100%);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--theme-color, #7FAADC) 65%, #ffffff) 0%, rgba(255, 255, 255, 0.04) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 60px color-mix(in srgb, var(--theme-color, #7FAADC) 45%, transparent));
 }
 
 /* Top Title Area */
@@ -185,34 +184,39 @@
   gap: 8px;
   padding: 6px 16px;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: color-mix(in srgb, var(--theme-color, #7FAADC) 20%, rgba(255, 255, 255, 0.1));
+  border: 1px solid color-mix(in srgb, var(--theme-color, #7FAADC) 60%, rgba(255, 255, 255, 0.2));
   font-size: 11px;
   font-weight: 800;
   color: #ffffff;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--theme-color, #7FAADC) 30%, transparent);
+  transition: all 0.5s ease;
 }
 
 .warrantyPill {
   font-size: 11px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .heroGrandTitle {
-  font-size: clamp(32px, 4.5vw, 54px);
+  font-size: clamp(34px, 4.8vw, 56px);
   font-weight: 900;
   line-height: 1.15;
   letter-spacing: -0.03em;
   color: #ffffff;
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
 }
 
 .heroTitleShimmer {
-  background: linear-gradient(135deg, #ffffff 20%, #fcd34d 60%, #f87171 100%);
+  background: linear-gradient(135deg, #ffffff 15%, color-mix(in srgb, var(--theme-color, #7FAADC) 85%, #ffffff) 65%, #ffffff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: drop-shadow(0 0 30px color-mix(in srgb, var(--theme-color, #7FAADC) 50%, transparent));
+  transition: all 0.6s ease;
 }
 
 /* ===== CENTERED PHONE SHOWCASE ===== */

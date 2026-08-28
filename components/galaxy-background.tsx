@@ -7,7 +7,7 @@ interface GalaxyProps {
   themeColor?: string
 }
 
-export default function GalaxyBackground({ themeColor = '#0070f3' }: GalaxyProps) {
+export default function GalaxyBackground({ themeColor = '#7FAADC' }: GalaxyProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -16,15 +16,15 @@ export default function GalaxyBackground({ themeColor = '#0070f3' }: GalaxyProps
 
     // Scene, Camera, Renderer
     const scene = new THREE.Scene()
-    scene.fog = new THREE.FogExp2(0x02040a, 0.0012)
+    scene.fog = new THREE.FogExp2(0x030306, 0.0008)
 
     const camera = new THREE.PerspectiveCamera(
-      60,
+      55,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      1200
     )
-    camera.position.set(0, 25, 45)
+    camera.position.set(0, 32, 58)
     camera.lookAt(0, 0, 0)
 
     const renderer = new THREE.WebGLRenderer({
@@ -36,20 +36,23 @@ export default function GalaxyBackground({ themeColor = '#0070f3' }: GalaxyProps
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     container.appendChild(renderer.domElement)
 
+    // Base color resolution from themeColor
+    const activeColor = new THREE.Color(themeColor || '#7FAADC')
+    const primaryColor = activeColor.clone()
+    const coreColor = activeColor.clone().addScalar(0.4)
+    const rimColor = activeColor.clone().offsetHSL(0.08, 0.2, -0.1)
+
     // ==========================================
-    // 1. SPIRAL GALAXY GENERATION (Logarithmic)
+    // 1. GRAND SPIRAL GALAXY GENERATION
     // ==========================================
     const parameters = {
-      count: 45000,
-      size: 0.018,
-      radius: 35,
-      branches: 4,
-      spin: 1.2,
-      randomness: 0.55,
-      power: 3.5,
-      insideColor: '#38bdf8',
-      midColor: '#818cf8',
-      outsideColor: '#c084fc',
+      count: 65000,
+      size: 0.022,
+      radius: 48,
+      branches: 5,
+      spin: 1.4,
+      randomness: 0.65,
+      power: 3.8,
     }
 
     const geometry = new THREE.BufferGeometry()
@@ -57,12 +60,7 @@ export default function GalaxyBackground({ themeColor = '#0070f3' }: GalaxyProps
     const colors = new Float32Array(parameters.count * 3)
     const scales = new Float32Array(parameters.count)
 
-    const colorInside = new THREE.Color(parameters.insideColor)
-    const colorMid = new THREE.Color(parameters.midColor)
-    const colorOutside = new THREE.Color(parameters.outsideColor)
-
     for (let i = 0; i < parameters.count; i++) {
-      // Position calculation
       const i3 = i * 3
       const radius = Math.random() * parameters.radius
       const spinAngle = radius * parameters.spin
@@ -77,7 +75,8 @@ export default function GalaxyBackground({ themeColor = '#0070f3' }: GalaxyProps
         Math.pow(Math.random(), parameters.power) *
         (Math.random() < 0.5 ? 1 : -1) *
         parameters.randomness *
-        radius
+        radius *
+        0.5
       const randomZ =
         Math.pow(Math.random(), parameters.power) *
         (Math.random() < 0.5 ? 1 : -1) *
@@ -88,48 +87,48 @@ export default function GalaxyBackground({ themeColor = '#0070f3' }: GalaxyProps
       positions[i3 + 1] = randomY
       positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ
 
-      // Color interpolation across radius
-      let mixedColor = colorInside.clone()
+      // Dynamic color interpolation
+      let mixedColor = coreColor.clone()
       const ratio = radius / parameters.radius
-      if (ratio < 0.35) {
-        mixedColor.lerp(colorMid, ratio / 0.35)
+      if (ratio < 0.3) {
+        mixedColor.lerp(primaryColor, ratio / 0.3)
       } else {
-        mixedColor = colorMid.clone().lerp(colorOutside, (ratio - 0.35) / 0.65)
+        mixedColor = primaryColor.clone().lerp(rimColor, (ratio - 0.3) / 0.7)
       }
 
-      // Core brightness boost
-      if (ratio < 0.1) {
-        mixedColor.addScalar(0.4)
+      if (ratio < 0.12) {
+        mixedColor.addScalar(0.5) // Super bright cosmic core
       }
 
       colors[i3] = mixedColor.r
       colors[i3 + 1] = mixedColor.g
       colors[i3 + 2] = mixedColor.b
 
-      scales[i] = Math.random() * 1.5 + 0.5
+      scales[i] = Math.random() * 1.8 + 0.4
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
     geometry.setAttribute('aScale', new THREE.BufferAttribute(scales, 1))
 
-    // Create Circular Star Particle Texture
-    const createStarTexture = () => {
+    // High quality soft glowing circular star texture
+    const createGlowTexture = () => {
       const canvas = document.createElement('canvas')
-      canvas.width = 64
-      canvas.height = 64
+      canvas.width = 128
+      canvas.height = 128
       const ctx = canvas.getContext('2d')!
-      const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32)
+      const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64)
       grad.addColorStop(0, 'rgba(255, 255, 255, 1)')
-      grad.addColorStop(0.2, 'rgba(240, 250, 255, 0.8)')
-      grad.addColorStop(0.5, 'rgba(100, 180, 255, 0.25)')
+      grad.addColorStop(0.15, 'rgba(255, 255, 255, 0.9)')
+      grad.addColorStop(0.4, 'rgba(255, 255, 255, 0.3)')
+      grad.addColorStop(0.75, 'rgba(255, 255, 255, 0.06)')
       grad.addColorStop(1, 'rgba(0, 0, 0, 0)')
       ctx.fillStyle = grad
-      ctx.fillRect(0, 0, 64, 64)
+      ctx.fillRect(0, 0, 128, 128)
       return new THREE.CanvasTexture(canvas)
     }
 
-    const starTexture = createStarTexture()
+    const starTexture = createGlowTexture()
 
     const material = new THREE.PointsMaterial({
       size: parameters.size,
@@ -142,102 +141,55 @@ export default function GalaxyBackground({ themeColor = '#0070f3' }: GalaxyProps
     })
 
     const galaxy = new THREE.Points(geometry, material)
-    galaxy.rotation.x = 0.45
+    galaxy.rotation.x = 0.48
     scene.add(galaxy)
 
     // ==========================================
-    // 2. BACKGROUND COSMIC STARFIELD & NEBULA
+    // 2. COSMIC NEBULA AURA CLOUDS
     // ==========================================
-    const bgStarCount = 2500
-    const bgGeometry = new THREE.BufferGeometry()
-    const bgPositions = new Float32Array(bgStarCount * 3)
-    const bgColors = new Float32Array(bgStarCount * 3)
-
-    for (let i = 0; i < bgStarCount; i++) {
-      const i3 = i * 3
-      bgPositions[i3] = (Math.random() - 0.5) * 300
-      bgPositions[i3 + 1] = (Math.random() - 0.5) * 300
-      bgPositions[i3 + 2] = (Math.random() - 0.5) * 300
-
-      const c = new THREE.Color().setHSL(0.6 + Math.random() * 0.2, 0.8, 0.6 + Math.random() * 0.4)
-      bgColors[i3] = c.r
-      bgColors[i3 + 1] = c.g
-      bgColors[i3 + 2] = c.b
-    }
-
-    bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3))
-    bgGeometry.setAttribute('color', new THREE.BufferAttribute(bgColors, 3))
-
-    const bgMaterial = new THREE.PointsMaterial({
-      size: 0.18,
-      sizeAttenuation: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      vertexColors: true,
-      map: starTexture,
+    const nebulaGeo = new THREE.SphereGeometry(18, 32, 32)
+    const nebulaMat = new THREE.MeshBasicMaterial({
+      color: activeColor,
       transparent: true,
-      opacity: 0.75,
+      opacity: 0.08,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
     })
+    const nebulaCore = new THREE.Mesh(nebulaGeo, nebulaMat)
+    scene.add(nebulaCore)
 
+    // Outer Starfield
+    const bgStarCount = 8000
+    const bgPositions = new Float32Array(bgStarCount * 3)
+    for (let i = 0; i < bgStarCount * 3; i += 3) {
+      bgPositions[i] = (Math.random() - 0.5) * 400
+      bgPositions[i + 1] = (Math.random() - 0.5) * 400
+      bgPositions[i + 2] = (Math.random() - 0.5) * 400
+    }
+    const bgGeometry = new THREE.BufferGeometry()
+    bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3))
+    const bgMaterial = new THREE.PointsMaterial({
+      size: 0.06,
+      sizeAttenuation: true,
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.65,
+      map: starTexture,
+      blending: THREE.AdditiveBlending,
+    })
     const bgStars = new THREE.Points(bgGeometry, bgMaterial)
     scene.add(bgStars)
 
     // ==========================================
-    // 3. SHOOTING METEORS (Cosmic Streaks)
+    // 3. MOUSE INTERACTION & PHYSICS
     // ==========================================
-    const meteors: Array<{
-      mesh: THREE.Line
-      velocity: THREE.Vector3
-      life: number
-      maxLife: number
-    }> = []
-
-    const createMeteor = () => {
-      const lineGeo = new THREE.BufferGeometry()
-      const startX = (Math.random() - 0.5) * 60
-      const startY = 15 + Math.random() * 15
-      const startZ = (Math.random() - 0.5) * 40
-      const points = [
-        new THREE.Vector3(startX, startY, startZ),
-        new THREE.Vector3(startX - 4, startY - 2.5, startZ - 2),
-      ]
-      lineGeo.setFromPoints(points)
-
-      const lineMat = new THREE.LineBasicMaterial({
-        color: new THREE.Color('#38bdf8'),
-        transparent: true,
-        opacity: 0.9,
-        blending: THREE.AdditiveBlending,
-      })
-
-      const line = new THREE.Line(lineGeo, lineMat)
-      scene.add(line)
-
-      meteors.push({
-        mesh: line,
-        velocity: new THREE.Vector3(-0.9 - Math.random() * 0.6, -0.6 - Math.random() * 0.4, -0.4),
-        life: 0,
-        maxLife: 45 + Math.random() * 30,
-      })
-    }
-
-    // ==========================================
-    // 4. MOUSE PHYSICS & INTERACTION
-    // ==========================================
-    const mouse = {
-      x: 0,
-      y: 0,
-      targetX: 0,
-      targetY: 0,
-    }
-
+    const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 }
     const onMouseMove = (event: MouseEvent) => {
       mouse.targetX = (event.clientX / window.innerWidth - 0.5) * 2
       mouse.targetY = (event.clientY / window.innerHeight - 0.5) * 2
     }
     window.addEventListener('mousemove', onMouseMove)
 
-    // Resize Handler
     const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
@@ -247,54 +199,27 @@ export default function GalaxyBackground({ themeColor = '#0070f3' }: GalaxyProps
     window.addEventListener('resize', onResize)
 
     // ==========================================
-    // 5. ANIMATION LOOP
+    // 4. ANIMATION LOOP
     // ==========================================
     const clock = new THREE.Clock()
     let frameId: number
-    let meteorTimer = 0
 
     const animate = () => {
       const elapsedTime = clock.getElapsedTime()
 
-      // Smooth inertia mouse lerp
-      mouse.x += (mouse.targetX - mouse.x) * 0.04
-      mouse.y += (mouse.targetY - mouse.y) * 0.04
+      mouse.x += (mouse.targetX - mouse.x) * 0.045
+      mouse.y += (mouse.targetY - mouse.y) * 0.045
 
-      // Rotate Galaxy
-      galaxy.rotation.y = elapsedTime * 0.05
-      galaxy.rotation.z = Math.sin(elapsedTime * 0.1) * 0.04
+      galaxy.rotation.y = elapsedTime * 0.045
+      galaxy.rotation.z = Math.sin(elapsedTime * 0.08) * 0.05
 
-      // Camera 3D response to cursor
-      camera.position.x = mouse.x * 12
-      camera.position.y = 25 - mouse.y * 8
-      camera.position.z = 45 + mouse.y * 5
-      camera.lookAt(mouse.x * 2, 0, mouse.y * 2)
+      camera.position.x = mouse.x * 14
+      camera.position.y = 32 - mouse.y * 10
+      camera.position.z = 58 + mouse.y * 6
+      camera.lookAt(mouse.x * 3, 0, mouse.y * 3)
 
-      // Background stars slow drift
-      bgStars.rotation.y = -elapsedTime * 0.015
-
-      // Spawn meteors periodically
-      meteorTimer++
-      if (meteorTimer > 180 && Math.random() < 0.04) {
-        createMeteor()
-        meteorTimer = 0
-      }
-
-      // Update meteors
-      for (let i = meteors.length - 1; i >= 0; i--) {
-        const m = meteors[i]
-        m.life++
-        m.mesh.position.add(m.velocity)
-        const mat = m.mesh.material as THREE.LineBasicMaterial
-        mat.opacity = 1 - m.life / m.maxLife
-
-        if (m.life >= m.maxLife) {
-          scene.remove(m.mesh)
-          m.mesh.geometry.dispose()
-          mat.dispose()
-          meteors.splice(i, 1)
-        }
-      }
+      nebulaCore.scale.setScalar(1 + Math.sin(elapsedTime * 0.6) * 0.08)
+      bgStars.rotation.y = -elapsedTime * 0.01
 
       renderer.render(scene, camera)
       frameId = requestAnimationFrame(animate)
@@ -314,6 +239,8 @@ export default function GalaxyBackground({ themeColor = '#0070f3' }: GalaxyProps
       starTexture.dispose()
       bgGeometry.dispose()
       bgMaterial.dispose()
+      nebulaGeo.dispose()
+      nebulaMat.dispose()
       renderer.dispose()
     }
   }, [themeColor])
