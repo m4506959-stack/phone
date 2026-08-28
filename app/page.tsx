@@ -80,8 +80,8 @@ export default function HomePage() {
   const [selectedColor, setSelectedColor] = useState<string>('')
   const [selectedStorage, setSelectedStorage] = useState<string>('')
   const [scrolled, setScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // Countdown timer state
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -89,7 +89,6 @@ export default function HomePage() {
     seconds: 0,
   })
 
-  // Countdown calculation
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date().getTime()
@@ -112,59 +111,79 @@ export default function HomePage() {
     return () => clearInterval(timer)
   }, [])
 
-  // Header scroll listener
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40)
+      setScrolled(window.scrollY > 20)
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Fetch products and store settings
-  useEffect(() => {
-    Promise.all([
-      fetch('/api/products').then((r) => r.json()),
-      fetch('/api/settings').then((r) => r.json()),
-    ])
-      .then(([prods, sets]) => {
-        if (Array.isArray(prods) && prods.length > 0) {
-          setProducts(prods)
-          setSelectedProductId(prods[0].id)
-          if (prods[0].variants?.[0]) {
-            setSelectedColor(prods[0].variants[0].color)
-            setSelectedStorage(prods[0].variants[0].storage)
-          }
+  const fetchProducts = useCallback(async () => {
+    try {
+      const res = await fetch('/api/products')
+      const data = await res.json()
+      if (Array.isArray(data) && data.length > 0) {
+        setProducts(data)
+        const initial = data.find((p: Product) => p.id === 'iphone-18-pro-max') || data[0]
+        setSelectedProductId(initial.id)
+        if (initial.variants.length > 0) {
+          setSelectedColor(initial.variants[0].color)
+          setSelectedStorage(initial.variants[0].storage)
         }
-        setSettings(sets)
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
   }, [])
+
+  const fetchSettings = useCallback(async () => {
+    try {
+      const res = await fetch('/api/settings')
+      const data = await res.json()
+      if (data && !data.error) {
+        setSettings(data)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchProducts()
+    fetchSettings()
+  }, [fetchProducts, fetchSettings])
+
+  const handleProductTabChange = (productId: string) => {
+    setSelectedProductId(productId)
+    const p = products.find((prod) => prod.id === productId)
+    if (p && p.variants.length > 0) {
+      const hasColor = p.variants.some((v) => v.color === selectedColor)
+      const hasStorage = p.variants.some((v) => v.storage === selectedStorage)
+      if (!hasColor) setSelectedColor(p.variants[0].color)
+      if (!hasStorage) setSelectedStorage(p.variants[0].storage)
+    }
+  }
 
   const currentProduct = products.find((p) => p.id === selectedProductId) || products[0]
 
-  const handleProductTabChange = useCallback(
-    (productId: string) => {
-      setSelectedProductId(productId)
-      const p = products.find((prod) => prod.id === productId)
-      if (p && p.variants.length > 0) {
-        setSelectedColor(p.variants[0].color)
-        setSelectedStorage(p.variants[0].storage)
-      }
-    },
-    [products]
+  const availableColors = Array.from(
+    new Map(
+      (currentProduct?.variants || []).map((v) => [
+        v.color,
+        {
+          name: v.color,
+          nameAr: v.colorAr || v.color,
+          hex: COLOR_HEX_MAP[v.color] || '#7FAADC',
+        },
+      ])
+    ).values()
   )
 
-  const availableColors = Array.from(
-    new Set(currentProduct?.variants.map((v) => v.color) || [])
-  ).map((c) => {
-    const v = currentProduct?.variants.find((item) => item.color === c)
-    return { name: c, nameAr: v?.colorAr || c, hex: COLOR_HEX_MAP[c] || '#888' }
-  })
-
   const availableStorages = Array.from(
-    new Set(currentProduct?.variants.map((v) => v.storage) || [])
+    new Set((currentProduct?.variants || []).map((v) => v.storage))
   )
 
   const currentVariant =
@@ -182,9 +201,8 @@ export default function HomePage() {
   const minPrice =
     currentProduct?.variants.reduce((min, v) => Math.min(min, v.price), Infinity) || 0
 
-  const activeColorHex = COLOR_HEX_MAP[selectedColor] || '#7A2E22'
+  const activeColorHex = COLOR_HEX_MAP[selectedColor] || '#7FAADC'
 
-  // Model Label for Backdrop Typography
   const modelBackdropText = selectedProductId.includes('pro-max')
     ? 'PRO MAX'
     : selectedProductId.includes('pro')
@@ -200,10 +218,8 @@ export default function HomePage() {
         ['--theme-color' as any]: activeColorHex,
       }}
     >
-      {/* 3D Deep Space WebGL Galaxy */}
       <GalaxyBackground themeColor={activeColorHex} />
 
-      {/* Floating Glassmorphic Top HUD */}
       <header className={`${styles.navBar} ${scrolled ? styles.navBarScrolled : ''}`}>
         <div className={styles.navInner}>
           <div className={styles.brandGroup}>
@@ -238,13 +254,56 @@ export default function HomePage() {
               {t.hero.reserveNow}
             </Link>
           </div>
+
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className={`${styles.hamburgerBtn} ${mobileMenuOpen ? styles.hamburgerActive : ''}`}
+            aria-label="Toggle mobile menu"
+          >
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
+
+        {mobileMenuOpen && (
+          <div className={styles.mobileMenuDrawer}>
+            <Link
+              href="/track"
+              className={styles.mobileNavLink}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t.nav.track}
+            </Link>
+            <Link
+              href="/admin"
+              className={styles.mobileNavLink}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t.nav.admin}
+            </Link>
+            <button
+              onClick={() => {
+                setLang(lang === 'ar' ? 'en' : 'ar')
+                setMobileMenuOpen(false)
+              }}
+              className={styles.mobileNavLink}
+            >
+              {lang === 'ar' ? 'English' : 'عربي'}
+            </button>
+            <Link
+              href={`/reserve?product=${selectedProductId}&storage=${selectedStorage}&color=${encodeURIComponent(selectedColor)}`}
+              className={styles.mobileNavPrimaryBtn}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t.hero.reserveNow}
+            </Link>
+          </div>
+        )}
       </header>
 
-      {/* Full-Bleed Apple-style Centered Hero */}
       <main>
         <section className={styles.heroSection}>
-          {/* Giant Typographic Backdrop */}
           <div className={styles.giantTypoBackdrop} aria-hidden="true">
             {modelBackdropText}
           </div>
